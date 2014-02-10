@@ -34,12 +34,8 @@ class Url < ActiveRecord::Base
   end
 
   def random_code
-    while true
-      random_code = [('a'..'z'), ('A'..'Z'), (0..9)].map { |i| i.to_a }.flatten.sample(5).join
-      if not Url.where(:code=> random_code).nil?
-        break
-      end
-    end
-    random_code
+    code = ''
+    code = SecureRandom.hex(3)[0...5] until where({ code: code }).blank?
+    code
   end
 end

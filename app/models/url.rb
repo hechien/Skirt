@@ -5,15 +5,14 @@ class Url < ActiveRecord::Base
 
   before_save :create_url_attributes
 
-  def self.verifyCode(code)
+  def self.verify_code(code)
     @redirect_url = Url.where(:code=> code)
-    if @redirect_url.count > 0
-      @redirect_url = @redirect_url.first
-      @redirect_url.count +=1
-      @redirect_url.save
-      @redirect_url.url
+    redirect_url = where({ code: code }).first
+    if redirect_url.present?
+      redirect_url.increment!(:count)
+      return redirect_url.url
     else
-      Rails.application.routes.url_helpers.root_path
+      return false
     end
   end
 

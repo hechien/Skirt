@@ -4,7 +4,8 @@ class IndexController < ApplicationController
   end
 
   def goto
-    redirect_to Url.verifyCode(params[:code])
+    target_url = Url.verify_code(params[:code]) || root_path
+    redirect_to target_url
   end
 
   def create
